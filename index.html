@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emanuela Printing - Sistem Pencatatan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER BERGAMBAR TEMA PRINTING -->
+    <header class="hero-header">
+        <div class="hero-overlay">
+            <h1>Emanuela Printing</h1>
+            <p>Sistem Pencatatan Penjualan & Pembelian</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- FORM PENJUALAN -->
+        <div class="card">
+            <h2>🛒 Pencatatan Penjualan</h2>
+            <form id="formPenjualan">
+                <label for="tglPenjualan">Tanggal Penjualan:</label>
+                <input type="date" id="tglPenjualan" required>
+
+                <label for="produkPenjualan">Item Produk / Jasa:</label>
+                <select id="produkPenjualan" required>
+                    <option value="Gantungan Kunci Akrilik">Gantungan Kunci Akrilik</option>
+                    <option value="Cetak Foto Polaroid">Cetak Foto Polaroid</option>
+                    <option value="Photostrip">Photostrip</option>
+                    <option value="Foto MDF">Foto MDF</option>
+                    <option value="Cetak Foto Berbagai Ukuran">Cetak Foto Berbagai Ukuran</option>
+                    <option value="Frame Pop Up">Frame Pop Up</option>
+                    <option value="Souvenir">Souvenir</option>
+                    <option value="Edukasi Anak">Edukasi Anak</option>
+                </select>
+
+                <label for="qtyPenjualan">Jumlah (Qty):</label>
+                <input type="number" id="qtyPenjualan" min="1" value="1" required>
+
+                <label for="hargaPenjualan">Harga Satuan (Rp):</label>
+                <input type="number" id="hargaPenjualan" placeholder="Contoh: 5000" required>
+
+                <label for="totalPenjualan">Total Harga (Rp):</label>
+                <input type="number" id="totalPenjualan" placeholder="Terhitung Otomatis" readonly class="input-readonly">
+
+                <label for="catatanPenjualan">Catatan (Opsional):</label>
+                <input type="text" id="catatanPenjualan" placeholder="Nama pemesan / Keterangan tambahan">
+
+                <button type="submit" class="btn-penjualan">Simpan Penjualan</button>
+            </form>
+        </div>
+
+        <!-- FORM PEMBELIAN -->
+        <div class="card">
+            <h2>📦 Pencatatan Pembelian Bahan</h2>
+            <form id="formPembelian">
+                <label for="tglPembelian">Tanggal Pembelian:</label>
+                <input type="date" id="tglPembelian" required>
+
+                <label for="bahanPembelian">Nama Bahan / Peralatan:</label>
+                <select id="bahanPembelian" required>
+                    <option value="Kertas Foto Glossy">Kertas Foto Glossy</option>
+                    <option value="Stiker Foto">Stiker Foto</option>
+                    <option value="Frame/Bingkai">Frame/Bingkai</option>
+                    <option value="HVS">HVS</option>
+                    <option value="Papan MDF">Papan MDF</option>
+                    <option value="Gantungan Kunci">Gantungan Kunci</option>
+                    <option value="Aksesoris Gantungan Kunci">Aksesoris Gantungan Kunci</option>
+                    <option value="Double Tip">Double Tip</option>
+                    <option value="Lem">Lem</option>
+                    <option value="Peralatan (Gunting, Pisau dll)">Peralatan (Gunting, Pisau dll)</option>
+                    <option value="Aksesoris Lainnya">Aksesoris Lainnya</option>
+                </select>
+
+                <label for="qtyPembelian">Jumlah (Qty):</label>
+                <input type="number" id="qtyPembelian" min="1" value="1" required>
+
+                <label for="hargaPembelian">Harga Beli Satuan (Rp):</label>
+                <input type="number" id="hargaPembelian" placeholder="Contoh: 15000" required>
+
+                <label for="totalPembelian">Total Beli (Rp):</label>
+                <input type="number" id="totalPembelian" placeholder="Terhitung Otomatis" readonly class="input-readonly">
+
+                <label for="vendorPembelian">Vendor / Toko Supplier:</label>
+                <input type="text" id="vendorPembelian" placeholder="Nama Toko / Supplier">
+
+                <button type="submit" class="btn-pembelian">Simpan Pembelian</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PANGGIL FILE APP.JS -->
+    <script src="app.js"></script>
+</body>
+</html>

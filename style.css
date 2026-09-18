@@ -1,0 +1,118 @@
+/* TATA LETAK UMUM */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+}
+
+/* HEADER BERGAMBAR HERO */
+.hero-header {
+    background-image: url('https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hero-overlay {
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.85), rgba(52, 152, 219, 0.8));
+    padding: 40px 20px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.hero-overlay h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-overlay p {
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 1.1rem;
+    color: #ecf0f1;
+    font-weight: 300;
+}
+
+/* WADAH KARTU FORM */
+.container {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 480px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: #34495e;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 12px;
+}
+
+/* FORM & INPUT */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+label {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: #34495e;
+    margin-top: 4px;
+}
+
+input, select {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.input-readonly {
+    background-color: #eef2f5;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* TOMBOL SIMPAN */
+button {
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.btn-penjualan { background-color: #2ecc71; }
+.btn-penjualan:hover { background-color: #27ae60; }
+
+.btn-pembelian { background-color: #e74c3c; }
+.btn-pembelian:hover { background-color: #c0392b; }
