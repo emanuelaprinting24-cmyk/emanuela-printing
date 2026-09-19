@@ -1,101 +1,596 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emanuela Printing - Sistem Pencatatan</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emanuela Printing - Sistem Pencatatan</title>
+  <style>
+    :root {
+      --primary-color: #0d6efd;
+      --secondary-color: #198754;
+      --sidebar-bg: #1e293b;
+      --sidebar-text: #f8fafc;
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Kiri */
+    .sidebar {
+      width: 260px;
+      background-color: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+      position: fixed;
+      height: 100vh;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .brand {
+      padding: 0 20px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+    }
+
+    .brand h2 { margin: 0; font-size: 20px; color: #38bdf8; }
+    .brand p { margin: 5px 0 0 0; font-size: 12px; opacity: 0.7; }
+
+    .menu-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 0 10px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.05);
+      color: #ffffff;
+    }
+
+    .nav-btn.active {
+      background: var(--primary-color);
+      color: #ffffff;
+    }
+
+    /* Area Konten Utama */
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 30px;
+    }
+
+    /* Dashboard Cards */
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 5px solid var(--primary-color);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .card.pembelian { border-left-color: #ef4444; }
+    .card.profit { border-left-color: #10b981; }
+
+    .card h3 { margin: 0 0 8px 0; font-size: 13px; color: #64748b; text-transform: uppercase; }
+    .card .value { font-size: 22px; font-weight: bold; color: #0f172a; }
+
+    /* Form Section */
+    .form-section {
+      display: none;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      margin-bottom: 25px;
+    }
+
+    .form-section.active { display: block; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+    
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .btn {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      width: 100%;
+    }
+
+    /* Tabel Riwayat */
+    .table-container {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      overflow-x: auto;
+    }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 10px; border-bottom: 1px solid var(--border-color); font-size: 13px; white-space: nowrap; }
+    th { background-color: #f8fafc; color: #475569; }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+    }
+    .bg-lunas { background-color: #10b981; }  /* Hijau */
+    .bg-proses { background-color: #f59e0b; } /* Oranye */
+    .bg-dp { background-color: #0284c7; }     /* Biru */
+    .bg-belum { background-color: #ef4444; }  /* Merah */
+
+    @media print {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 0; }
+      .form-section { display: none !important; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- HEADER BERGAMBAR TEMA PRINTING -->
-    <header class="hero-header">
-        <div class="hero-overlay">
-            <h1>Emanuela Printing</h1>
-            <p>Sistem Pencatatan Penjualan & Pembelian</p>
-        </div>
-    </header>
+  <!-- Sidebar Navigasi Kiri -->
+  <div class="sidebar">
+    <div class="brand">
+      <h2>EMANUELA PRINTING</h2>
+      <p>Puji Lestari Br Sitepu</p>
+    </div>
+    <div class="menu-nav">
+      <button class="nav-btn active" onclick="switchTab('penjualan')">
+        🛒 Penjualan
+      </button>
+      <button class="nav-btn" onclick="switchTab('pembelian')">
+        📦 Pembelian Bahan
+      </button>
+      <button class="nav-btn" onclick="window.print()">
+        🖨️ Cetak Laporan
+      </button>
+    </div>
+  </div>
 
-    <div class="container">
-        <!-- FORM PENJUALAN -->
-        <div class="card">
-            <h2>🛒 Pencatatan Penjualan</h2>
-            <form id="formPenjualan">
-                <label for="tglPenjualan">Tanggal Penjualan:</label>
-                <input type="date" id="tglPenjualan" required>
-
-                <label for="produkPenjualan">Item Produk / Jasa:</label>
-                <select id="produkPenjualan" required>
-                    <option value="Gantungan Kunci Akrilik">Gantungan Kunci Akrilik</option>
-                    <option value="Cetak Foto Polaroid">Cetak Foto Polaroid</option>
-                    <option value="Photostrip">Photostrip</option>
-                    <option value="Foto MDF">Foto MDF</option>
-                    <option value="Cetak Foto Berbagai Ukuran">Cetak Foto Berbagai Ukuran</option>
-                    <option value="Frame Pop Up">Frame Pop Up</option>
-                    <option value="Souvenir">Souvenir</option>
-                    <option value="Edukasi Anak">Edukasi Anak</option>
-                </select>
-
-                <label for="qtyPenjualan">Jumlah (Qty):</label>
-                <input type="number" id="qtyPenjualan" min="1" value="1" required>
-
-                <label for="hargaPenjualan">Harga Satuan (Rp):</label>
-                <input type="number" id="hargaPenjualan" placeholder="Contoh: 5000" required>
-
-                <label for="totalPenjualan">Total Harga (Rp):</label>
-                <input type="number" id="totalPenjualan" placeholder="Terhitung Otomatis" readonly class="input-readonly">
-
-                <label for="catatanPenjualan">Catatan (Opsional):</label>
-                <input type="text" id="catatanPenjualan" placeholder="Nama pemesan / Keterangan tambahan">
-
-                <!-- INPUT NOMOR HP / WA PEMBELI -->
-                <label for="noHpPenjualan">No. HP / WA Pembeli:</label>
-                <input type="tel" id="noHpPenjualan" placeholder="Contoh: 081234567890">
-
-                <button type="submit" class="btn-penjualan">Simpan Penjualan</button>
-            </form>
-        </div>
-
-        <!-- FORM PEMBELIAN -->
-        <div class="card">
-            <h2>📦 Pencatatan Pembelian Bahan</h2>
-            <form id="formPembelian">
-                <label for="tglPembelian">Tanggal Pembelian:</label>
-                <input type="date" id="tglPembelian" required>
-
-                <label for="bahanPembelian">Nama Bahan / Peralatan:</label>
-                <select id="bahanPembelian" required>
-                    <option value="Kertas Foto Glossy">Kertas Foto Glossy</option>
-                    <option value="Stiker Foto">Stiker Foto</option>
-                    <option value="Frame/Bingkai">Frame/Bingkai</option>
-                    <option value="HVS">HVS</option>
-                    <option value="Papan MDF">Papan MDF</option>
-                    <option value="Gantungan Kunci">Gantungan Kunci</option>
-                    <option value="Aksesoris Gantungan Kunci">Aksesoris Gantungan Kunci</option>
-                    <option value="Double Tip">Double Tip</option>
-                    <option value="Lem">Lem</option>
-                    <option value="Peralatan (Gunting, Pisau dll)">Peralatan (Gunting, Pisau dll)</option>
-                    <option value="Aksesoris Lainnya">Aksesoris Lainnya</option>
-                </select>
-
-                <label for="qtyPembelian">Jumlah (Qty):</label>
-                <input type="number" id="qtyPembelian" min="1" value="1" required>
-
-                <label for="hargaPembelian">Harga Beli Satuan (Rp):</label>
-                <input type="number" id="hargaPembelian" placeholder="Contoh: 15000" required>
-
-                <label for="totalPembelian">Total Beli (Rp):</label>
-                <input type="number" id="totalPembelian" placeholder="Terhitung Otomatis" readonly class="input-readonly">
-
-                <label for="vendorPembelian">Vendor / Toko Supplier:</label>
-                <input type="text" id="vendorPembelian" placeholder="Nama Toko / Supplier">
-
-                <button type="submit" class="btn-pembelian">Simpan Pembelian</button>
-            </form>
-        </div>
+  <!-- Area Konten Utama -->
+  <div class="main-content">
+    
+    <!-- Summary Cards -->
+    <div class="dashboard">
+      <div class="card">
+        <h3>Total Penjualan</h3>
+        <div class="value" id="totalPenjualan">Rp 0</div>
+      </div>
+      <div class="card pembelian">
+        <h3>Total Pembelian</h3>
+        <div class="value" id="totalPembelian">Rp 0</div>
+      </div>
+      <div class="card profit">
+        <h3>Keuntungan Bersih</h3>
+        <div class="value" id="totalProfit">Rp 0</div>
+      </div>
     </div>
 
-    <!-- LINK KE FILE APP.JS -->
-    <script src="app.js"></script>
-</body>
-</html>
+    <!-- Form Penjualan -->
+    <div id="form-penjualan" class="form-section active">
+      <h3 style="margin-top:0;">🛒 Input Penjualan Baru</h3>
+      <form id="penjualanForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tanggal</label>
+            <input type="date" class="form-control" id="tglPenjualan" required>
+          </div>
+          <div class="form-group">
+            <label>Nama Produk / Jasa</label>
+            <select class="form-control" id="itemPenjualan">
+              <option>Gantungan Kunci Akrilik</option>
+              <option>Cetak Foto Polaroid</option>
+              <option>Photostrip</option>
+              <option>Foto MDF</option>
+              <option>Cetak Foto Berbagai Ukuran</option>
+              <option>Frame Pop Up</option>
+              <option>Souvenir</option>
+              <option>Edukasi Anak</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Jumlah (Qty)</label>
+            <input type="number" class="form-control" id="qtyPenjualan" value="1" oninput="hitungPenjualan()">
+          </div>
+          <div class="form-group">
+            <label>Harga Satuan (Rp)</label>
+            <input type="number" class="form-control" id="hargaPenjualan" placeholder="5000" oninput="hitungPenjualan()">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Total Harga (Rp)</label>
+          <input type="text" class="form-control" id="totalPenjualanInput" readonly placeholder="Terhitung Otomatis">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nama Pembeli</label>
+            <input type="text" class="form-control" id="pembeliPenjualan" placeholder="Nama Pelanggan">
+          </div>
+          <div class="form-group">
+            <label>No. HP / WA Pembeli</label>
+            <input type="text" class="form-control" id="waPembeli" placeholder="081234567890">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Metode Pembayaran</label>
+            <select class="form-control" id="metodePembayaran">
+              <option value="Tunai">Tunai</option>
+              <option value="Transfer BCA">Transfer BCA</option>
+              <option value="QRIS">QRIS</option>
+              <option value="Transfer Lainnya">Transfer Lainnya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status Pesanan</label>
+            <select class="form-control" id="statusPesanan">
+              <option value="Lunas">Selesai & Lunas</option>
+              <option value="DP">DP (Uang Muka)</option>
+              <option value="Belum Bayar">Belum Bayar</option>
+              <option value="Proses">Proses Desain/Cetak</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>DP / Bayar (Rp)</label>
+            <input type="number" class="form-control" id="dpPenjualan" placeholder="0" oninput="hitungPenjualan()">
+          </div>
+          <div class="form-group">
+            <label>Sisa Pembayaran (Rp)</label>
+            <input type="text" class="form-control" id="sisaPenjualanInput" readonly placeholder="Terhitung Otomatis">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Catatan (Opsional)</label>
+          <input type="text" class="form-control" id="catatanPenjualan" placeholder="Catatan tambahan">
+        </div>
+        <button type="button" class="btn" onclick="simpanPenjualan()">Simpan Penjualan</button>
+      </form>
+    </div>
+
+    <!-- Form Pembelian -->
+    <div id="form-pembelian" class="form-section">
+      <h3 style="margin-top:0;">📦 Input Pembelian Bahan</h3>
+      <form id="pembelianForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tanggal</label>
+            <input type="date" class="form-control" id="tglPembelian" required>
+          </div>
+          <div class="form-group">
+            <label>Nama Bahan / Peralatan</label>
+            <select class="form-control" id="itemPembelian">
+              <option>Kertas Foto Glossy</option>
+              <option>Stiker Foto</option>
+              <option>Frame / Bingkai</option>
+              <option>HVS</option>
+              <option>Papan MDF</option>
+              <option>Gantungan Kunci & Aksesoris</option>
+              <option>Double Tip & Lem</option>
+              <option>Peralatan (Gunting, Cutter, dll)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Jumlah (Qty)</label>
+            <input type="number" class="form-control" id="qtyPembelian" value="1" oninput="hitungPembelian()">
+          </div>
+          <div class="form-group">
+            <label>Harga Beli Satuan (Rp)</label>
+            <input type="number" class="form-control" id="hargaPembelian" placeholder="15000" oninput="hitungPembelian()">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Total Beli</label>
+          <input type="text" class="form-control" id="totalPembelianInput" readonly placeholder="Terhitung Otomatis">
+        </div>
+        <div class="form-group">
+          <label>Vendor / Toko Supplier</label>
+          <input type="text" class="form-control" id="vendorPembelian" placeholder="Nama Toko / Supplier">
+        </div>
+        <button type="button" class="btn" style="background-color: #ef4444;" onclick="simpanPembelian()">Simpan Pembelian</button>
+      </form>
+    </div>
+
+    <!-- Tabel Riwayat -->
+    <div class="table-container">
+      <h3>📋 Riwayat Transaksi</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Jenis</th>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Total (Rp)</th>
+            <th>Pembeli</th>
+            <th>Metode</th>
+            <th>Status</th>
+            <th>DP (Rp)</th>
+            <th>Sisa (Rp)</th>
+            <th>No. WA</th>
+            <th>Catatan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="riwayatTable"></tbody>
+      </table>
+    </div>
+
+  </div>
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzpgRQx7ivhQN0plm0W2NIhXVOCuhMHV45DbYszATM5Ceswrse4wK1iv3JNhFkgslHL/exec";
+
+  let dataPenjualan = JSON.parse(localStorage.getItem('emanuela_penjualan')) || [];
+  let dataPembelian = JSON.parse(localStorage.getItem('emanuela_pembelian')) || [];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('tglPenjualan').valueAsDate = new Date();
+    document.getElementById('tglPembelian').valueAsDate = new Date();
+    updateUI();
+  });
+
+  // Kirim data ke Google Apps Script
+  function kirimKeGoogleSheets(payload) {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(err => console.error("Gagal mengirim ke Sheets:", err));
+  }
+
+  // Navigasi Tab (Penjualan / Pembelian)
+  function switchTab(tabName) {
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.form-section').forEach(sec => sec.classList.remove('active'));
+
+    if (tabName === 'penjualan') {
+      document.querySelectorAll('.nav-btn')[0].classList.add('active');
+      document.getElementById('form-penjualan').classList.add('active');
+    } else if (tabName === 'pembelian') {
+      document.querySelectorAll('.nav-btn')[1].classList.add('active');
+      document.getElementById('form-pembelian').classList.add('active');
+    }
+  }
+
+  // Hitung Otomatis Total & Sisa Pembayaran Penjualan
+  function hitungPenjualan() {
+    const qty = parseFloat(document.getElementById('qtyPenjualan').value) || 0;
+    const harga = parseFloat(document.getElementById('hargaPenjualan').value) || 0;
+    const dp = parseFloat(document.getElementById('dpPenjualan').value) || 0;
+    
+    const total = qty * harga;
+    const sisa = total - dp;
+
+    document.getElementById('totalPenjualanInput').value = "Rp " + total.toLocaleString('id-ID');
+    document.getElementById('sisaPenjualanInput').value = "Rp " + (sisa < 0 ? 0 : sisa).toLocaleString('id-ID');
+  }
+
+  // Hitung Otomatis Total Pembelian
+  function hitungPembelian() {
+    const qty = parseFloat(document.getElementById('qtyPembelian').value) || 0;
+    const harga = parseFloat(document.getElementById('hargaPembelian').value) || 0;
+    document.getElementById('totalPembelianInput').value = "Rp " + (qty * harga).toLocaleString('id-ID');
+  }
+
+  // Simpan Data Penjualan
+  function simpanPenjualan() {
+    const tgl = document.getElementById('tglPenjualan').value;
+    const item = document.getElementById('itemPenjualan').value;
+    const qty = parseInt(document.getElementById('qtyPenjualan').value) || 0;
+    const harga = parseInt(document.getElementById('hargaPenjualan').value) || 0;
+    const total = qty * harga;
+    const pembeli = document.getElementById('pembeliPenjualan').value || '-';
+    const wa = document.getElementById('waPembeli').value || '-';
+    const metode = document.getElementById('metodePembayaran').value;
+    const status = document.getElementById('statusPesanan').value;
+    const dp = parseInt(document.getElementById('dpPenjualan').value) || 0;
+    const sisa = total - dp < 0 ? 0 : total - dp;
+    const catatan = document.getElementById('catatanPenjualan').value || '-';
+
+    if (total <= 0) return alert('Masukkan jumlah dan harga yang valid!');
+
+    const payload = {
+      jenis: 'Penjualan',
+      tanggal: tgl,
+      item: item,
+      qty: qty,
+      harga: harga,
+      total: total,
+      pembeli: pembeli,
+      wa: wa,
+      metode: metode,
+      status: status,
+      dp: dp,
+      sisa: sisa,
+      catatan: catatan
+    };
+
+    dataPenjualan.push({ id: Date.now(), tgl, item, qty, total, pembeli, wa, metode, status, dp, sisa, catatan });
+    simpanKeStorage();
+    updateUI();
+    kirimKeGoogleSheets(payload);
+
+    // Reset Form
+    document.getElementById('penjualanForm').reset();
+    document.getElementById('tglPenjualan').valueAsDate = new Date();
+    document.getElementById('totalPenjualanInput').value = '';
+    document.getElementById('sisaPenjualanInput').value = '';
+  }
+
+  // Simpan Data Pembelian
+  function simpanPembelian() {
+    const tgl = document.getElementById('tglPembelian').value;
+    const item = document.getElementById('itemPembelian').value;
+    const qty = parseInt(document.getElementById('qtyPembelian').value) || 0;
+    const harga = parseInt(document.getElementById('hargaPembelian').value) || 0;
+    const vendorEl = document.getElementById('vendorPembelian');
+    const vendor = vendorEl ? vendorEl.value : '-';
+    const total = qty * harga;
+
+    if (total <= 0) return alert('Masukkan jumlah dan harga yang valid!');
+
+    const payload = {
+      jenis: 'Pembelian',
+      tanggal: tgl,
+      item: item,
+      qty: qty,
+      harga: harga,
+      total: total,
+      vendor: vendor,
+      status: 'Selesai'
+    };
+
+    dataPembelian.push({ id: Date.now(), tgl, item, qty, total, status: 'Keluar', catatan: 'Vendor: ' + vendor });
+    simpanKeStorage();
+    updateUI();
+    kirimKeGoogleSheets(payload);
+
+    // Reset Form
+    document.getElementById('pembelianForm').reset();
+    document.getElementById('tglPembelian').valueAsDate = new Date();
+    document.getElementById('totalPembelianInput').value = '';
+  }
+
+  // Hapus Data
+  function hapusPenjualan(id) {
+    if (confirm('Hapus data penjualan ini?')) {
+      dataPenjualan = dataPenjualan.filter(item => item.id !== id);
+      simpanKeStorage();
+      updateUI();
+    }
+  }
+
+  function hapusPembelian(id) {
+    if (confirm('Hapus data pembelian ini?')) {
+      dataPembelian = dataPembelian.filter(item => item.id !== id);
+      simpanKeStorage();
+      updateUI();
+    }
+  }
+
+  // Simpan ke LocalStorage Browser
+  function simpanKeStorage() {
+    localStorage.setItem('emanuela_penjualan', JSON.stringify(dataPenjualan));
+    localStorage.setItem('emanuela_pembelian', JSON.stringify(dataPembelian));
+  }
+
+  // Perbarui Tampilan Dashboard & Tabel
+  function updateUI() {
+    let grandTotalPenjualan = dataPenjualan.reduce((acc, curr) => acc + curr.total, 0);
+    let grandTotalPembelian = dataPembelian.reduce((acc, curr) => acc + curr.total, 0);
+    let profit = grandTotalPenjualan - grandTotalPembelian;
+
+    document.getElementById('totalPenjualan').innerText = "Rp " + grandTotalPenjualan.toLocaleString('id-ID');
+    document.getElementById('totalPembelian').innerText = "Rp " + grandTotalPembelian.toLocaleString('id-ID');
+    document.getElementById('totalProfit').innerText = "Rp " + profit.toLocaleString('id-ID');
+
+    const tbody = document.getElementById('riwayatTable');
+    tbody.innerHTML = '';
+
+    // Render Data Penjualan
+    dataPenjualan.forEach(d => {
+      let badgeClass = 'bg-proses';
+      if (d.status === 'Lunas' || d.status === 'Selesai & Lunas') badgeClass = 'bg-lunas';
+      else if (d.status === 'DP') badgeClass = 'bg-dp';
+      else if (d.status === 'Belum Bayar') badgeClass = 'bg-belum';
+
+      tbody.innerHTML += `<tr>
+        <td>${d.tgl}</td>
+        <td><strong style="color: green;">Penjualan</strong></td>
+        <td>${d.item}</td>
+        <td>${d.qty}</td>
+        <td>Rp ${d.total.toLocaleString('id-ID')}</td>
+        <td>${d.pembeli || '-'}</td>
+        <td>${d.metode || '-'}</td>
+        <td><span class="badge ${badgeClass}">${d.status}</span></td>
+        <td>Rp ${(d.dp || 0).toLocaleString('id-ID')}</td>
+        <td>Rp ${(d.sisa || 0).toLocaleString('id-ID')}</td>
+        <td>${d.wa || '-'}</td>
+        <td>${d.catatan || '-'}</td>
+        <td><button onclick="hapusPenjualan(${d.id})" style="color:red; cursor:pointer; border:none; background:none;">❌</button></td>
+      </tr>`;
+    });
+
+    // Render Data Pembelian
+    dataPembelian.forEach(d => {
+      tbody.innerHTML += `<tr>
+        <td>${d.tgl}</td>
+        <td><strong style="color: red;">Pembelian</strong></td>
+        <td>${d.item}</td>
+        <td>${d.qty}</td>
+        <td>Rp ${d.total.toLocaleString('id-ID')}</td>
+        <td>-</td>
+        <td>-</td>
+        <td><span class="badge" style="background-color: #64748b;">Selesai</span></td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>${d.catatan || '-'}</td>
+        <td><button onclick="hapusPembelian(${d.id})" style="color:red; cursor:pointer; border:none; background:none;">❌</button></td>
+      </tr>`;
+    });
+  }
+</script>
